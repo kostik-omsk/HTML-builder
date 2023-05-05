@@ -6,11 +6,13 @@ const filename = path.join(__dirname, 'text.txt');
 
 stdout.write('Введите текст\n');
 
+const exit = () => {
+  console.log('Программа завершена');
+  process.exit();
+};
+
 stdin.on('data', (data) => {
-  if (data.toString().trim() === 'exit') {
-    console.log('Программа завершена');
-    process.exit();
-  }
+  if (data.toString().trim() === 'exit') exit();
 
   fs.appendFile(filename, data, (err) => {
     if (err) throw err;
@@ -18,7 +20,4 @@ stdin.on('data', (data) => {
   });
 });
 
-process.on('SIGINT', () => {
-  console.log('\nПрограмма завершена');
-  process.exit();
-});
+process.on('SIGINT', exit);
