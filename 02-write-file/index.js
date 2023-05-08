@@ -4,6 +4,10 @@ const { stdin, stdout } = process;
 
 const filename = path.join(__dirname, 'text.txt');
 
+fs.writeFile(filename, '', (err) => {
+  if (err) throw err;
+});
+
 stdout.write('Введите текст\n');
 
 const exit = () => {
