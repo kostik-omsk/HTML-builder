@@ -54,13 +54,13 @@ async function createStyleBundle() {
 async function copyDir(srcDir, destDir) {
   await fs.mkdir(destDir, { recursive: true });
 
-  const entries = await fs.readdir(srcDir, { withFileTypes: true });
+  const files = await fs.readdir(srcDir, { withFileTypes: true });
 
-  for (let entry of entries) {
-    const srcPath = path.join(srcDir, entry.name);
-    const destPath = path.join(destDir, entry.name);
+  for (let file of files) {
+    const srcPath = path.join(srcDir, file.name);
+    const destPath = path.join(destDir, file.name);
 
-    if (entry.isDirectory()) {
+    if (file.isDirectory()) {
       await copyDir(srcPath, destPath);
     } else {
       await fs.copyFile(srcPath, destPath);
