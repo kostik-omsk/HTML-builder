@@ -19,9 +19,11 @@ async function replaceTags(content, tag, replacement) {
 async function addComponents() {
   const componentsDir = path.join(__dirname, 'components');
   const files = await fs.readdir(componentsDir);
+  const htmlFiles = files.filter((file) => path.extname(file) === '.html');
+
   const components = {};
 
-  for (const file of files) {
+  for (const file of htmlFiles) {
     const componentName = path.parse(file).name;
     const filePath = path.join(componentsDir, file);
     const content = await readFile(filePath);
@@ -33,6 +35,7 @@ async function addComponents() {
   for (const [tag, replacement] of Object.entries(components)) {
     template = await replaceTags(template, tag, replacement);
   }
+  template = template.replace(/{{(.+?)}}/g, '');
   return template;
 }
 
@@ -52,6 +55,7 @@ async function createStyleBundle() {
 }
 
 async function copyDir(srcDir, destDir) {
+  await fs.rm(destDir, { recursive: true, force: true });
   await fs.mkdir(destDir, { recursive: true });
 
   const files = await fs.readdir(srcDir, { withFileTypes: true });
